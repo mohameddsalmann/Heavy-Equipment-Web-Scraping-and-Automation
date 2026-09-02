@@ -1,0 +1,334 @@
+matcher_thresholds:
+  accept_threshold: 0.70
+  review_threshold: 0.50
+
+search_queries:
+  # Generic discovery queries used ONLY for marketplace queries/crawling.
+  # Listings retrieved via search queries must still pass deterministic EquipmentMatcher.
+  - "CAT loader"
+  - "CAT wheel loader"
+  - "Caterpillar loader"
+  - "Caterpillar wheel loader"
+  - "CASE backhoe"
+  - "CASE backhoe loader"
+  - "CASE 580"
+
+target_models:
+  # Caterpillar Wheel Loaders
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "970F"
+    equipment_type: "Wheel Loader"
+    aliases: ["970F", "970 F", "970-F"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "966F"
+    equipment_type: "Wheel Loader"
+    aliases: ["966F", "966 F", "966-F"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "966H"
+    equipment_type: "Wheel Loader"
+    aliases: ["966H", "966 H", "966-H"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "966G"
+    equipment_type: "Wheel Loader"
+    aliases: ["966G", "966 G", "966-G"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "966E"
+    equipment_type: "Wheel Loader"
+    aliases: ["966E", "966 E", "966-E"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "966D"
+    equipment_type: "Wheel Loader"
+    aliases: ["966D", "966 D", "966-D"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "980H"
+    equipment_type: "Wheel Loader"
+    aliases: ["980H", "980 H", "980-H"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "980G"
+    equipment_type: "Wheel Loader"
+    aliases: ["980G", "980 G", "980-G"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "972H"
+    equipment_type: "Wheel Loader"
+    aliases: ["972H", "972 H", "972-H"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "972G"
+    equipment_type: "Wheel Loader"
+    aliases: ["972G", "972 G", "972-G"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "950B"
+    equipment_type: "Wheel Loader"
+    aliases: ["950B", "950 B", "950-B"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "950E"
+    equipment_type: "Wheel Loader"
+    aliases: ["950E", "950 E", "950-E"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "936E"
+    equipment_type: "Wheel Loader"
+    aliases: ["936E", "936 E", "936-E"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "936"
+    equipment_type: "Wheel Loader"
+    aliases: ["936"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "930"
+    equipment_type: "Wheel Loader"
+    aliases: ["930"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "920"
+    equipment_type: "Wheel Loader"
+    aliases: ["920"]
+
+  # Caterpillar Backhoe Loaders
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "416C"
+    equipment_type: "Backhoe Loader"
+    aliases: ["416C", "416 C", "416-C"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "420D"
+    equipment_type: "Backhoe Loader"
+    aliases: ["420D", "420 D", "420-D"]
+  - manufacturer: "Caterpillar"
+    manufacturer_aliases: ["cat", "caterpillar"]
+    canonical_model: "416D"
+    equipment_type: "Backhoe Loader"
+    aliases: ["416D", "416 D", "416-D"]
+
+  # CASE Backhoe Loaders (Canonical model: 580SL)
+  - manufacturer: "CASE"
+    manufacturer_aliases: ["case", "case ce", "case construction"]
+    canonical_model: "580SL"
+    equipment_type: "Backhoe Loader"
+    aliases:
+      - "580SL"
+      - "580 SL"
+      - "580 Super L"
+      - "580 Super-L"
+      - "580L"
+
+
+manufacturers:
+  CAT:
+    canonical_name: "Caterpillar"
+    aliases:
+      - "cat"
+      - "caterpillar"
+    categories:
+      wheel_loader:
+        equipment_type: "Wheel Loader"
+        target_models:
+          - canonical_name: "970F"
+            aliases: ["970F", "970 F", "970-F"]
+          - canonical_name: "966F"
+            aliases: ["966F", "966 F", "966-F"]
+          - canonical_name: "966H"
+            aliases: ["966H", "966 H", "966-H"]
+          - canonical_name: "966G"
+            aliases: ["966G", "966 G", "966-G"]
+          - canonical_name: "966E"
+            aliases: ["966E", "966 E", "966-E"]
+          - canonical_name: "966D"
+            aliases: ["966D", "966 D", "966-D"]
+          - canonical_name: "980H"
+            aliases: ["980H", "980 H", "980-H"]
+          - canonical_name: "980G"
+            aliases: ["980G", "980 G", "980-G"]
+          - canonical_name: "972H"
+            aliases: ["972H", "972 H", "972-H"]
+          - canonical_name: "972G"
+            aliases: ["972G", "972 G", "972-G"]
+          - canonical_name: "950B"
+            aliases: ["950B", "950 B", "950-B"]
+          - canonical_name: "950E"
+            aliases: ["950E", "950 E", "950-E"]
+          - canonical_name: "936E"
+            aliases: ["936E", "936 E", "936-E"]
+          - canonical_name: "936"
+            aliases: ["936"]
+          - canonical_name: "930"
+            aliases: ["930"]
+          - canonical_name: "920"
+            aliases: ["920"]
+      backhoe_loader:
+        equipment_type: "Backhoe Loader"
+        target_models:
+          - canonical_name: "416C"
+            aliases: ["416C", "416 C", "416-C"]
+          - canonical_name: "420D"
+            aliases: ["420D", "420 D", "420-D"]
+          - canonical_name: "416D"
+            aliases: ["416D", "416 D", "416-D"]
+
+  CASE:
+    canonical_name: "CASE"
+    aliases:
+      - "case"
+      - "case ce"
+      - "case construction"
+    categories:
+      backhoe_loader:
+        equipment_type: "Backhoe Loader"
+        target_models:
+          - canonical_name: "580SL"
+            aliases:
+              - "580SL"
+              - "580 SL"
+              - "580 Super L"
+              - "580 Super-L"
+              - "580L"
+
+equipment_terms:
+  - "wheel loader"
+  - "loader"
+  - "backhoe loader"
+  - "backhoe"
+  - "front loader"
+  - "payloader"
+  - "tractor loader backhoe"
+
+negative_terms:
+  # Hard disqualification when matched as primary subject or isolated part
+  parts_and_accessories:
+    - "radiator"
+    - "transmission"
+    - "engine"
+    - "engine only"
+    - "engine block"
+    - "cylinder head"
+    - "hydraulic pump"
+    - "hydraulic cylinder"
+    - "cylinder"
+    - "cab assembly"
+    - "undercarriage only"
+    - "rims"
+    - "rim"
+    - "cab only"
+    - "boom only"
+    - "bucket"
+    - "bucket only"
+    - "attachment"
+    - "attachments"
+    - "quick coupler"
+    - "pallet forks only"
+    - "grapple only"
+    - "blade only"
+    - "teeth only"
+    - "cutting edge"
+    - "tire"
+    - "tyre"
+    - "tires"
+    - "tyres"
+    - "tracks only"
+    - "salvage parts"
+    - "parting out"
+    - "parts machine"
+    - "for parts"
+    - "parts only"
+    - "wrecking"
+    - "dismantling"
+  documentation:
+    - "manual"
+    - "service manual"
+    - "parts manual"
+    - "operator manual"
+    - "workshop manual"
+    - "repair manual"
+    - "handbook"
+    - "brochure"
+    - "catalog"
+    - "catalogue"
+  merchandise_and_toys:
+    - "toy"
+    - "toys"
+    - "diecast"
+    - "die-cast"
+    - "model toy"
+    - "scale model"
+    - "scale 1:"
+    - "1:50"
+    - "1:64"
+    - "1:87"
+    - "1:16"
+    - "1:32"
+    - "poster"
+    - "sign"
+    - "metal sign"
+    - "shirt"
+    - "t-shirt"
+    - "shoe"
+    - "shoes"
+    - "boots"
+    - "boot"
+    - "hat"
+    - "cap"
+    - "jacket"
+    - "belt buckle"
+    - "sticker"
+    - "stickers"
+    - "decal"
+    - "decals"
+    - "keychain"
+
+positive_context_indicators:
+  - "hours"
+  - "hrs"
+  - "operating hours"
+  - "machine hours"
+  - "year"
+  - "yr"
+  - "operating weight"
+  - "cab with ac"
+  - "enclosed cab"
+  - "open rops"
+  - "rops"
+  - "4x4"
+  - "4wd"
+  - "differential lock"
+  - "ride control"
+  - "quick attach"
+  - "rebuilt transmission"
+  - "new transmission"
+  - "rebuilt engine"
+  - "new engine"
+  - "new engine installed"
+  - "new tires"
+  - "new tyres"
+  - "good tires"
+  - "bucket included"
+  - "with bucket"
+  - "gp bucket"
+  - "spade nose bucket"
+  - "aux hydraulics"
+  - "auxiliary hydraulics"
+  - "clean machine"
+  - "complete machine"
+  - "complete unit"
+  - "whole machine"
+  - "ready to work"
+  - "ready for work"
+  - "job ready"
+  - "runs great"
+  - "runs and operates"
+  - "runs well"
+  - "good condition"
+  - "original paint"
+  - "pins and bushings tight"
