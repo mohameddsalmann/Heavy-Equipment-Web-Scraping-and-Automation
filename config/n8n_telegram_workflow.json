@@ -1,0 +1,181 @@
+{
+  "name": "Heavy Equipment Alerts to Telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "1f8e2340-a120-43b9-8e42-176313134211",
+      "name": "Schedule Trigger (Every 1m)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "http://localhost:8000/api/alerts/pending",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        },
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "limit",
+              "value": "25"
+            }
+          ]
+        }
+      },
+      "id": "2b9d5671-e456-42c1-8d23-745612349876",
+      "name": "Fetch Pending Alerts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        460,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "",
+        "options": {}
+      },
+      "id": "3c8e7892-f789-43d2-9e34-856723450987",
+      "name": "Item Lists / Split",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3,
+      "position": [
+        680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID || 'YOUR_CHAT_ID' }}",
+        "text": "={{ $json.telegram_message }}",
+        "additionalFields": {
+          "parse_mode": "Markdown",
+          "disable_web_page_preview": false
+        }
+      },
+      "id": "4d9f8903-a890-44e3-af45-967834561098",
+      "name": "Send Alert via Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        900,
+        300
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "telegram-bot-creds",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://localhost:8000/api/alerts/{{ $json.id }}/delivered",
+        "options": {}
+      },
+      "id": "5e0a9014-b901-45f4-b056-078945672109",
+      "name": "Mark Alert Delivered",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://localhost:8000/api/alerts/{{ $json.id }}/fail",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "error",
+              "value": "={{ $node[\"Send Alert via Telegram\"].json.error || 'Telegram delivery dispatch failed' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6f1b0125-c012-4605-c167-189056783210",
+      "name": "Record Alert Failure",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1120,
+        480
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger (Every 1m)": {
+      "main": [
+        [
+          {
+            "node": "Fetch Pending Alerts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Pending Alerts": {
+      "main": [
+        [
+          {
+            "node": "Item Lists / Split",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists / Split": {
+      "main": [
+        [
+          {
+            "node": "Send Alert via Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Alert via Telegram": {
+      "main": [
+        [
+          {
+            "node": "Mark Alert Delivered",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

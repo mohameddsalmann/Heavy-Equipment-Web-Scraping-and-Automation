@@ -25,6 +25,9 @@ class EquipmentMatcher:
         watchlist: Optional[WatchlistConfig] = None,
         accept_threshold: Optional[float] = None,
         review_threshold: Optional[float] = None,
+        min_plausible_price: Optional[float] = None,
+        max_plausible_price: Optional[float] = None,
+        suspicious_placeholder_prices: Optional[List[float]] = None,
     ) -> None:
         self.watchlist = watchlist or load_watchlist()
 
@@ -45,6 +48,21 @@ class EquipmentMatcher:
                 "review_threshold",
                 settings.MATCH_REVIEW_THRESHOLD,
             )
+        )
+        self.min_plausible_price = (
+            min_plausible_price
+            if min_plausible_price is not None
+            else settings.MIN_PLAUSIBLE_PRICE
+        )
+        self.max_plausible_price = (
+            max_plausible_price
+            if max_plausible_price is not None
+            else settings.MAX_PLAUSIBLE_PRICE
+        )
+        self.suspicious_placeholder_prices = set(
+            suspicious_placeholder_prices
+            if suspicious_placeholder_prices is not None
+            else settings.PRICE_ANOMALY_PLACEHOLDERS
         )
 
         self._init_matchers()
@@ -405,6 +423,29 @@ class EquipmentMatcher:
             classification = MatchClassification.REJECT
             is_target = False
             rejection_reason = f"Confidence ({confidence:.2f}) below review threshold {self.review_threshold:.2f}"
+
+        # Step 12: Post-Match Anomaly Gate (Price Plausibility)
+        # A suspicious price must NOT automatically reject a potentially real machine.
+        # Instead, it is demoted to REVIEW_REQUIRED / PRICE_ANOMALY.
+        if classification == MatchClassification.ACCEPT and extracted_price is not None:
+            price_val = float(extracted_price)
+            is_anomaly = False
+            anomaly_msg = ""
+            if price_val < self.min_plausible_price:
+                is_anomaly = True
+                anomaly_msg = f"Price (${price_val:,.2f}) below plausible threshold (${self.min_plausible_price:,.0f})"
+            elif price_val > self.max_plausible_price:
+                is_anomaly = True
+                anomaly_msg = f"Price (${price_val:,.2f}) exceeds plausible threshold (${self.max_plausible_price:,.0f})"
+            elif price_val in self.suspicious_placeholder_prices:
+                is_anomaly = True
+                anomaly_msg = f"Price (${price_val:,.2f}) is a known placeholder"
+
+            if is_anomaly:
+                classification = MatchClassification.REVIEW
+                is_target = False
+                matched_rules.append("price_anomaly")
+                rejection_reason = f"REVIEW_REQUIRED / PRICE_ANOMALY: {anomaly_msg}"
 
         return MatchResult(
             classification=classification,

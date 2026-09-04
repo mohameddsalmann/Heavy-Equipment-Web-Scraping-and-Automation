@@ -11,7 +11,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.models import Listing, PriceHistory
+from app.database.models import AlertEvent, Listing, PriceHistory
 from app.schemas.listing import MatchClassification, MatchResult, RawListing
 
 
@@ -64,7 +64,9 @@ class ListingService:
         existing = result.scalar_one_or_none()
 
         if existing is not None:
-            return await self._handle_existing(existing, raw, status_val, confidence_val, now, auto_commit)
+            return await self._handle_existing(
+                existing, raw, match, status_val, confidence_val, now, auto_commit
+            )
 
         # Create new listing
         new_price = Decimal(str(raw.price)) if raw.price is not None else None
@@ -108,6 +110,35 @@ class ListingService:
                 )
                 self.session.add(initial_price)
 
+            # Only confirmed ACCEPT listings trigger alert outbox events
+            if match and match.classification == MatchClassification.ACCEPT:
+                alert_event = AlertEvent(
+                    id=uuid.uuid4(),
+                    event_type="NEW_LISTING",
+                    listing_id=new_listing.id,
+                    payload_json={
+                        "event_type": "NEW_LISTING",
+                        "listing_id": str(new_listing.id),
+                        "external_id": new_listing.external_id,
+                        "source": new_listing.source,
+                        "title": new_listing.title,
+                        "manufacturer": new_listing.manufacturer,
+                        "model": new_listing.model,
+                        "equipment_type": new_listing.equipment_type,
+                        "price": float(new_listing.price) if new_listing.price is not None else None,
+                        "currency": new_listing.currency,
+                        "location": new_listing.location,
+                        "url": new_listing.url,
+                        "image_url": new_listing.image_url,
+                        "serial_number": new_listing.serial_number,
+                        "seller_name": new_listing.seller_name,
+                        "confidence": float(match.confidence),
+                        "detected_at": now.isoformat(),
+                    },
+                    created_at=now,
+                )
+                self.session.add(alert_event)
+
             if auto_commit:
                 await self.session.commit()
             else:
@@ -134,12 +165,15 @@ class ListingService:
             if refetched is None:
                 raise
 
-            return await self._handle_existing(refetched, raw, status_val, confidence_val, now, auto_commit)
+            return await self._handle_existing(
+                refetched, raw, match, status_val, confidence_val, now, auto_commit
+            )
 
     async def _handle_existing(
         self,
         existing: Listing,
         raw: RawListing,
+        match: Optional[MatchResult],
         status_val: str,
         confidence_val: float,
         now: datetime,
@@ -194,6 +228,36 @@ class ListingService:
                 )
                 self.session.add(price_record)
                 outcome = UpsertOutcome.PRICE_CHANGED
+
+                # Only confirmed ACCEPT listings trigger alert outbox events
+                if match and match.classification == MatchClassification.ACCEPT:
+                    alert_event = AlertEvent(
+                        id=uuid.uuid4(),
+                        event_type="PRICE_CHANGED",
+                        listing_id=existing.id,
+                        payload_json={
+                            "event_type": "PRICE_CHANGED",
+                            "listing_id": str(existing.id),
+                            "external_id": existing.external_id,
+                            "source": existing.source,
+                            "title": existing.title,
+                            "manufacturer": existing.manufacturer,
+                            "model": existing.model,
+                            "equipment_type": existing.equipment_type,
+                            "old_price": float(old_price) if old_price is not None else None,
+                            "price": float(new_price) if new_price is not None else None,
+                            "currency": new_currency,
+                            "location": existing.location,
+                            "url": existing.url,
+                            "image_url": existing.image_url,
+                            "serial_number": existing.serial_number,
+                            "seller_name": existing.seller_name,
+                            "confidence": float(match.confidence),
+                            "detected_at": now.isoformat(),
+                        },
+                        created_at=now,
+                    )
+                    self.session.add(alert_event)
         else:
             # 85000 -> None: Do not interpret missing price as a price drop.
             # Preserve existing known price and currency, keeping outcome as DUPLICATE.

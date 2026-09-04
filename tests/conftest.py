@@ -63,7 +63,7 @@ async def test_db_session(pg_engine):
     async with pg_engine.connect() as conn:
         await conn.execution_options(isolation_level="AUTOCOMMIT")
         await conn.execute(
-            text("TRUNCATE TABLE price_history, listings, source_scan_status CASCADE;")
+            text("TRUNCATE TABLE alert_events, price_history, listings, source_scan_status CASCADE;")
         )
 
 
@@ -78,5 +78,5 @@ async def session_factory(pg_engine):
     async with pg_engine.connect() as conn:
         await conn.execution_options(isolation_level="AUTOCOMMIT")
         await conn.execute(
-            text("TRUNCATE TABLE price_history, listings, source_scan_status CASCADE;")
+            text("TRUNCATE TABLE alert_events, price_history, listings, source_scan_status CASCADE;")
         )

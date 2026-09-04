@@ -10,6 +10,7 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
+    JSON,
     Numeric,
     String,
     Text,
@@ -82,11 +83,41 @@ class Listing(Base):
         order_by="PriceHistory.detected_at",
         lazy="selectin",
     )
+    alert_events: Mapped[List[AlertEvent]] = relationship(
+        "AlertEvent",
+        back_populates="listing",
+        cascade="all, delete-orphan",
+        order_by="AlertEvent.created_at",
+        lazy="selectin",
+    )
 
     __table_args__ = (
         UniqueConstraint("source", "external_id", name="uq_source_external_id"),
         Index("ix_listings_source_external", "source", "external_id"),
     )
+
+
+class AlertEvent(Base):
+    """Outbox table for webhook/notification alert events (Telegram/n8n integration)."""
+
+    __tablename__ = "alert_events"
+
+    id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, default=uuid.uuid4)
+    event_type: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    listing_id: Mapped[uuid.UUID] = mapped_column(
+        Uuid, ForeignKey("listings.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    payload_json: Mapped[dict] = mapped_column(JSON, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=get_utc_now, nullable=False, index=True
+    )
+    delivered_at: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True), nullable=True, index=True
+    )
+    attempt_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    last_error: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+
+    listing: Mapped[Listing] = relationship("Listing", back_populates="alert_events")
 
 
 class PriceHistory(Base):

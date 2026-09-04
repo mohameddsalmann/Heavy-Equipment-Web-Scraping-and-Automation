@@ -1,0 +1,105 @@
+# Facebook Marketplace Search Region Grid (US and Canada)
+# Configurable location slugs/identifiers and regional coordinates for fast concurrent discovery
+
+regions:
+  # ============================================================================
+  # UNITED STATES
+  # ============================================================================
+  - id: "us_texas"
+    name: "Texas"
+    country: "US"
+    location_id: "dallas"
+    search_url: "https://www.facebook.com/marketplace/dallas/search"
+    enabled: true
+    priority: 1
+
+  - id: "us_california"
+    name: "California"
+    country: "US"
+    location_id: "losangeles"
+    search_url: "https://www.facebook.com/marketplace/losangeles/search"
+    enabled: true
+    priority: 1
+
+  - id: "us_midwest"
+    name: "Midwest"
+    country: "US"
+    location_id: "chicago"
+    search_url: "https://www.facebook.com/marketplace/chicago/search"
+    enabled: true
+    priority: 2
+
+  - id: "us_southeast"
+    name: "Southeast"
+    country: "US"
+    location_id: "atlanta"
+    search_url: "https://www.facebook.com/marketplace/atlanta/search"
+    enabled: true
+    priority: 2
+
+  - id: "us_northeast"
+    name: "Northeast"
+    country: "US"
+    location_id: "nyc"
+    search_url: "https://www.facebook.com/marketplace/nyc/search"
+    enabled: true
+    priority: 2
+
+  - id: "us_southwest"
+    name: "Southwest"
+    country: "US"
+    location_id: "phoenix"
+    search_url: "https://www.facebook.com/marketplace/phoenix/search"
+    enabled: true
+    priority: 2
+
+  - id: "us_pacific_northwest"
+    name: "Pacific Northwest"
+    country: "US"
+    location_id: "seattle"
+    search_url: "https://www.facebook.com/marketplace/seattle/search"
+    enabled: true
+    priority: 2
+
+  # ============================================================================
+  # CANADA
+  # ============================================================================
+  - id: "ca_ontario"
+    name: "Ontario"
+    country: "CA"
+    location_id: "toronto"
+    search_url: "https://www.facebook.com/marketplace/toronto/search"
+    enabled: true
+    priority: 1
+
+  - id: "ca_alberta"
+    name: "Alberta"
+    country: "CA"
+    location_id: "calgary"
+    search_url: "https://www.facebook.com/marketplace/calgary/search"
+    enabled: true
+    priority: 1
+
+  - id: "ca_british_columbia"
+    name: "British Columbia"
+    country: "CA"
+    location_id: "vancouver"
+    search_url: "https://www.facebook.com/marketplace/vancouver/search"
+    enabled: true
+    priority: 2
+
+  - id: "ca_central_canada"
+    name: "Central Canada"
+    country: "CA"
+    location_id: "winnipeg"
+    search_url: "https://www.facebook.com/marketplace/winnipeg/search"
+    enabled: true
+    priority: 2
+
+  - id: "ca_quebec_east"
+    name: "Quebec / East"
+    country: "CA"
+    location_id: "montreal"
+    search_url: "https://www.facebook.com/marketplace/montreal/search"
+    enabled: true
+    priority: 2

@@ -131,9 +131,36 @@ class Settings(BaseSettings):
 
     MACHINERYTRADER_ENABLED: bool = True
     MACHINIO_ENABLED: bool = True
-    FACEBOOK_MARKETPLACE_ENABLED: bool = False
+    FACEBOOK_MARKETPLACE_ENABLED: bool = True
+    FACEBOOK_PROVIDER: str = "apify"
+    FACEBOOK_MAX_CONCURRENCY: int = 4
+    FACEBOOK_REQUEST_TIMEOUT_SECONDS: int = 60
+    APIFY_TOKEN: Optional[str] = None
+    APIFY_FACEBOOK_ACTOR_ID: Optional[str] = None
+    FACEBOOK_APIFY_ACTOR_ID: str = "blackfalcondata/facebook-marketplace-scraper"
+    FACEBOOK_FALLBACK_ACTORS: List[str] = [
+        "calm_builder/facebook-marketplace-scraper",
+        "apify/facebook-marketplace-scraper",
+    ]
+    FACEBOOK_INCREMENTAL_MODE: bool = True
+    FACEBOOK_STATE_KEY: str = "heavy_equipment_monitor"
+    FACEBOOK_EMIT_UNCHANGED: bool = False
+    FACEBOOK_SORT_BY: str = "newest"
+
+    # Price plausibility anomaly gate
+    MIN_PLAUSIBLE_PRICE: float = 4000.0
+    MAX_PLAUSIBLE_PRICE: float = 2000000.0
+    PRICE_ANOMALY_PLACEHOLDERS: List[float] = [1.0, 2.0, 10.0, 100.0, 123.0, 1234.0, 12345.0]
+
+    BRIGHTDATA_API_KEY: Optional[str] = None
+    BRIGHTDATA_DATASET_ID: Optional[str] = None
     FACEBOOK_PROVIDER_API_KEY: Optional[str] = None
     FACEBOOK_PROVIDER_ENDPOINT: Optional[str] = None
+
+    @property
+    def active_facebook_actor_id(self) -> str:
+        """Returns configured Facebook Actor ID, supporting both env var naming conventions."""
+        return self.FACEBOOK_APIFY_ACTOR_ID or self.APIFY_FACEBOOK_ACTOR_ID or "blackfalcondata/facebook-marketplace-scraper"
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -143,3 +170,5 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+FACEBOOK_REGIONS_PATH = CONFIG_DIR / "facebook_regions.yaml"
+
