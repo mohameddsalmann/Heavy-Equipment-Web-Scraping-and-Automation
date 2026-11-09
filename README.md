@@ -1,4 +1,6 @@
-Mario — Heavy Equipment Web Scraping & Automation
+Heavy Equipment Web Scraping & Automation
+
+
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue) ![Scraping](https://img.shields.io/badge/Web%20Scraping-Playwright%20%7C%20BeautifulSoup-2496ED) ![Automation](https://img.shields.io/badge/Automation-n8n%20%7C%20Monitoring-orange) ![API](https://img.shields.io/badge/API-FastAPI-009688)
 Mario is a Python backend for automated heavy-equipment listing discovery, web scraping, monitoring, matching, and notifications. It collects listing information from MachineryTrader and supported Facebook Marketplace scraping providers, filters machines against a configurable watchlist, tracks duplicate and updated listings, and prepares Telegram alerts via n8n.
 > This is an equipment-marketplace monitoring system, **not** a universal scraping platform or no-code scraping UI.
